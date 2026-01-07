@@ -1,5 +1,4 @@
 
-
 ###  ---  Default Template  ---  ###
 kind_cluster_name        = "dev-cluster"
 kind_cluster_config_path = "~/.kube/config"
