@@ -1,5 +1,4 @@
-<img width="1387" height="781" alt="image" src="https://github.com/user-attachments/assets/4bb094b8-09a4-4fb3-a390-37fbc0955a58" />
-
+<img width="1387" height="781" alt="image" src="https://github.com/user-attachments/assets/984954cc-ce3c-4aa5-acc2-6cbc085041da" />
 
 
 ###  OpenFunction | Kubernetes ☸️
