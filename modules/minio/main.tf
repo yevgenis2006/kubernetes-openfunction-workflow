@@ -1,25 +1,57 @@
 
 resource "helm_release" "minio" {
-  name       = "minio"
-  namespace  = "minio"
-  repository = "https://charts.min.io/"
-  chart      = "minio"
-  version    = "5.0.15" # check latest version
+  name             = "minio"
+  namespace        = "default"
+  repository       = "https://charts.min.io/"
+  chart            = "minio"
+  #version          = "5.1.6"  # check latest stable version
   create_namespace = true
 
-  values = [<<EOF
-auth:
-  rootUser: root
-  rootPassword: q1w2e3r4100@
+  values = [
+    yamlencode({
+      mode         = "standalone"
+      replicas     = 1
 
-defaultBuckets: "velero,terraform,loki"
+      # Root credentials (use variable for security)
+      rootUser     = "root"
+      rootPassword = var.minio_root_password
 
-persistence:
-  enabled: true
-  size: 10Gi
+      # Buckets to create automatically
+      buckets = [
+        { name = "velero" },
+        { name = "airbyte" }
 
-service:
-  type: ClusterIP 
-EOF
+      ]
+
+      # Enable persistent storage
+      persistence = {
+        enabled = true
+        size    = "10Gi"
+      }
+
+      # Service configuration
+      service = {
+        type = "ClusterIP"  # use NodePort or LoadBalancer if needed
+        port = 9000         # default S3 API port
+      }
+
+      # Console UI service
+      console = {
+        enabled = true
+        port    = 9001
+      }
+
+      # Resource requests & limits
+      resources = {
+        requests = {
+          memory = "512Mi"
+          cpu    = "250m"
+        }
+        limits = {
+          memory = "1Gi"
+          cpu    = "1000m"
+        }
+      }
+    })
   ]
 }
